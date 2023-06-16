@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -13,6 +14,9 @@ public class BottleController {
 
     @Autowired
     BottleService bottleService;
+
+    @Autowired
+    RestTemplate restTemplate;
 @PostMapping()
 public ResponseEntity<Integer> saveBottle(@RequestBody Bottle bottle)
 {
@@ -159,6 +163,14 @@ public ResponseEntity<Object> getByCapacity()
         return new ResponseEntity<>(errorMessage,HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(capacity,HttpStatus.OK);
+}
+
+@GetMapping("call")
+    public ResponseEntity<Object> getAnotherApi()
+{
+    ResponseEntity<Object> response = restTemplate.getForEntity("http://localhost:8082/employee/emp/{id}", Object.class,1);
+   return response;
+
 }
 
 
